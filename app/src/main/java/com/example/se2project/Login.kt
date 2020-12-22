@@ -1,49 +1,40 @@
 package com.example.se2project
 
 import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputLayout
 import com.vishnusivadas.advanced_httpurlconnection.PutData
-import kotlinx.android.synthetic.main.layout_register.*
 
+class Login : AppCompatActivity() {
 
-class register : AppCompatActivity() {
-
-    private lateinit var fullnameEditText: TextInputLayout
     private lateinit var usernameEditText: TextInputLayout
-    private lateinit var emailEditText: TextInputLayout
     private lateinit var passwordEditText: TextInputLayout
-    private lateinit var register: Button
-    private lateinit var login: TextView
-
+    private lateinit var login: Button
+    private lateinit var register: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.layout_register)
+        setContentView(R.layout.layout_login)
 
-        fullnameEditText = findViewById(R.id.registerActivity_fullname)
-        usernameEditText = findViewById(R.id.registerActivity_username)
-        emailEditText = findViewById(R.id.registerActivity_email)
-        passwordEditText = findViewById(R.id.registerActivity_password)
-        register = findViewById(R.id.registerActivity_register)
-        login = findViewById(R.id.registerActivity_login)
+        usernameEditText = findViewById(R.id.loginActivity_username)
+        passwordEditText = findViewById(R.id.loginActivity_password)
+        login = findViewById(R.id.loginActivity_login)
+        register = findViewById(R.id.loginActivity_register)
 
-        register.setOnClickListener {
+        login.setOnClickListener {
 
-            val fullname: String = fullnameEditText.editText?.text.toString()
             val username: String = usernameEditText.editText?.text.toString()
-            val email: String = emailEditText.editText?.text.toString()
             val password: String = passwordEditText.editText?.text.toString()
 
 
 
-            if (fullname != "" && username != "" && email != "" && password != "") {
+            if (username != "" && password != "") {
 
                 //Start ProgressBar first (Set visibility VISIBLE)
                 //Start ProgressBar first (Set visibility VISIBLE)
@@ -51,20 +42,16 @@ class register : AppCompatActivity() {
                 handler.post(Runnable {
                     //Starting Write and Read data with URL
                     //Creating array for parameters
-                    val field = arrayOfNulls<String>(4)
-                    field[0] = "fullname"
-                    field[1] = "username"
-                    field[2] = "password"
-                    field[3] = "email"
+                    val field = arrayOfNulls<String>(2)
+                    field[0] = "username"
+                    field[1] = "password"
                     //Creating array for data
-                    val data = arrayOfNulls<String>(4)
-                    data[0] = fullname
-                    data[1] = username
-                    data[2] = email
-                    data[3] = password
+                    val data = arrayOfNulls<String>(2)
+                    data[0] = username
+                    data[1] = password
 
                     val putData = PutData(
-                        "http://192.168.0.2/Login_Register/signup.php",
+                        "http://192.168.0.2/Login_Register/login.php",
                         "POST",
                         field,
                         data
@@ -72,10 +59,10 @@ class register : AppCompatActivity() {
                     if (putData.startPut()) {
                         if (putData.onComplete()) {
                             val result = putData.result
-                            if (result == "Sign Up Success") {
+                            if (result == "Login Success") {
 
                                 Toast.makeText(this, result, Toast.LENGTH_SHORT).show()
-                                val intent = Intent(this, Login::class.java)
+                                val intent = Intent(this, Home::class.java)
                                 startActivity(intent)
                                 finish()
 
@@ -91,9 +78,8 @@ class register : AppCompatActivity() {
                 Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show()
             }
         }
-
-        login.setOnClickListener{
-            val intent = Intent(this, Login::class.java)
+        register.setOnClickListener {
+            val intent = Intent(this, com.example.se2project.register::class.java)
             startActivity(intent)
             finish()
         }
